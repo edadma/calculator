@@ -1,21 +1,18 @@
 import React from 'react'
 import {
-  Alert,
   Button,
   Card,
   Grid,
-  ModeProvider,
-  ModeSwitcher,
-  Progress,
-  ThemeProvider,
+  ThemeProvider,Text
 } from '@edadma/react-tailwind'
 import { DefaultTheme } from '@edadma/react-tailwind/dist/themes/DefaultTheme'
 
 function App() {
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Card>
-        <Grid>
+      <Card className="w-3/12">
+        <Grid cols={1}>
+          <Button>asdf</Button>
           <Grid cols={5} bg="primary">
             <Button>regular</Button>
             <Button role="info">info</Button>
