@@ -11,6 +11,7 @@ function App() {
   const [state, setState] = useState<State>({ display: '0', op: null })
 
   const Key: React.FC = ({ children }) => <Button rounded={false}>{children}</Button>
+
   return (
     <ThemeProvider value={DefaultTheme}>
       <Card bg="primary" className="w-3/12">
