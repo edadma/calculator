@@ -23,7 +23,7 @@ function reducer(state: State, action: Action): State {
         case '⤺':
           return {
             display:
-              state.display.length === 1
+              (state.display.match(/[0-9]/g) || []).length === 1
                 ? '0'
                 : state.display.substring(0, state.display.length - 1),
             op: state.op,
@@ -32,6 +32,16 @@ function reducer(state: State, action: Action): State {
           return state.display.includes('.')
             ? state
             : { display: state.display + '.', op: state.op }
+        case '±':
+          return {
+            display:
+              state.display.substring(0, 1) === '-'
+                ? state.display.substring(1)
+                : state.display === '0'
+                ? state.display
+                : '-' + state.display,
+            op: state.op,
+          }
         default:
           throw new Error('Invalid')
       }
