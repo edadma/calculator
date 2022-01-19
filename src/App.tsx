@@ -3,45 +3,54 @@ import { Button, Card, Grid, ThemeProvider, Text, Elem } from '@edadma/react-tai
 import { DefaultTheme } from '@edadma/react-tailwind/dist/themes/DefaultTheme'
 
 interface State {
+  prev: number | null
   display: string
   op: string | null
 }
 
 type Action = { type: 'digit'; digit: string } | { type: 'function'; func: string }
 
-function reducer(state: State, action: Action): State {
+function reducer({ prev, display, op }: State, action: Action): State {
   switch (action.type) {
     case 'digit':
       return {
-        display: state.display === '0' ? action.digit : state.display + action.digit,
-        op: state.op,
+        prev,
+        display: display === '0' ? action.digit : display + action.digit,
+        op,
       }
     case 'function':
       switch (action.func) {
         case 'C':
-          return { display: '0', op: null }
+          return { prev: null, display: '0', op: null }
         case '⤺':
           return {
+            prev,
             display:
-              (state.display.match(/[0-9]/g) || []).length === 1
+              (display.match(/[0-9]/g) || []).length === 1
                 ? '0'
-                : state.display.substring(0, state.display.length - 1),
-            op: state.op,
+                : display.substring(0, display.length - 1),
+            op,
           }
         case '.':
-          return state.display.includes('.')
-            ? state
-            : { display: state.display + '.', op: state.op }
+          return display.includes('.')
+            ? { prev, display, op }
+            : { prev, display: display + '.', op }
         case '±':
           return {
+            prev,
             display:
-              state.display.substring(0, 1) === '-'
-                ? state.display.substring(1)
-                : state.display === '0'
-                ? state.display
-                : '-' + state.display,
-            op: state.op,
+              display.substring(0, 1) === '-'
+                ? display.substring(1)
+                : display === '0'
+                ? display
+                : '-' + display,
+            op,
           }
+        case '÷':
+        case '×':
+        case '+':
+        case '-':
+
         default:
           throw new Error('Invalid')
       }
@@ -49,7 +58,7 @@ function reducer(state: State, action: Action): State {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, { display: '0', op: null })
+  const [state, dispatch] = useReducer(reducer, { prev: null, display: '0', op: null })
 
   const handleDigitKeyClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     dispatch({ type: 'digit', digit: (e.target as HTMLButtonElement).firstChild?.nodeValue! })
