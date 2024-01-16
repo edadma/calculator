@@ -12,7 +12,11 @@ val buttons =
   List(
     (104, 621, 154, 673) -> '0',
     (103, 546, 154, 597) -> '1',
+    (179, 545, 228, 595) -> '2',
     (106, 325, 158, 371) -> 'C',
+    (257, 620, 306, 672) -> '=',
+    (334, 622, 382, 668) -> '+',
+    (332, 547, 381, 594) -> '-',
   )
 val displayVar = Var("0")
 val displaySignal = displayVar.signal
@@ -23,6 +27,7 @@ def App =
     img(
       src := "./img.png",
       onClick --> { event =>
+        println((event.clientX, event.clientY))
         buttons find { case ((x1, y1, x2, y2), _) =>
           x1 <= event.clientX && event.clientX <= x2 &&
           y1 <= event.clientY && event.clientY <= y2
@@ -33,13 +38,9 @@ def App =
     ),
     div(
       idAttr := "screen",
-      cls := "absolute text-teal-300 text-3xl italic float-right flex justify-end bg-slate-600 bg-opacity-100 left-[111px] top-[107px] w-[258px] h-[36px]",
+      cls := "absolute text-teal-300 text-3xl italic float-right flex justify-end bg-gray-600 bg-opacity-100 left-[111px] top-[107px] w-[258px] h-[36px]",
       child.text <-- displaySignal,
     ),
   )
 
 // https://www.keshikan.net/fonts-e.html
-
-/*
-display: 111,107 - 369,146
- */
