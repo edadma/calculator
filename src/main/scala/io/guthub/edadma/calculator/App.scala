@@ -63,9 +63,11 @@ def App =
   div(
     cls := "relative",
     img(
+      idAttr := "image",
       src := "./img.png",
       onClick --> { event =>
         println((event.clientX, event.clientY))
+        println()
         buttons find { case ((x1, y1, x2, y2), _) =>
           x1 <= event.clientX && event.clientX <= x2 &&
           y1 <= event.clientY && event.clientY <= y2
