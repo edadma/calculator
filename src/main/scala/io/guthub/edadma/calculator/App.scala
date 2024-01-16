@@ -20,6 +20,44 @@ val buttons =
   )
 val displayVar = Var("0")
 val displaySignal = displayVar.signal
+var current: Double = 0
+var previous: Double = 0
+var operation: Char = ' '
+var calculation: Boolean = false
+var first = true
+
+def perform(op: Char): PartialFunction[(Double, Double), Double] =
+  op match
+    case '+' => _ + _
+    case '-' => _ - _
+
+def press(c: Char): Unit =
+  c match
+    case '0' | '1' | '2' =>
+      if first then
+        displayVar set c.toString
+        first = false
+      else displayVar.update(v => v :+ c)
+    case '+' | '-' =>
+      operation = c
+      calculation = true
+      current = displaySignal.now().toDouble
+      first = true
+    case '=' =>
+      if calculation then
+        previous = current
+        current = displaySignal.now().toDouble
+
+        val result = perform(operation)(previous, current)
+
+        current = result
+        calculation = false
+        displayVar set result.toString
+    case 'C' =>
+      displayVar set "0"
+      first = true
+      calculation = false
+      previous = 0
 
 def App =
   div(
@@ -33,7 +71,7 @@ def App =
           y1 <= event.clientY && event.clientY <= y2
         } match
           case None         =>
-          case Some((_, c)) => displayVar.update(v => v :+ c)
+          case Some((_, c)) => press(c)
       },
     ),
     div(
