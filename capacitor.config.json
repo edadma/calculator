@@ -1,0 +1,13 @@
+{
+  "appId": "io.guthub.edadma.calculator",
+  "appName": "calculator",
+  "webDir": "target/build",
+  "server": {
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}
